@@ -1,0 +1,2 @@
+./department-service/src/main/resources/application.properties
+./employee-service/src/main/resources/application.properties
