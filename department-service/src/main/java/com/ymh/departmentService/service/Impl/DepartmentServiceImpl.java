@@ -5,43 +5,40 @@ import com.ymh.departmentService.entity.Department;
 import com.ymh.departmentService.repository.DepartmentRepository;
 import com.ymh.departmentService.service.DepartmentService;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
 public class DepartmentServiceImpl implements DepartmentService {
     private DepartmentRepository departmentRepository;
+    private ModelMapper mapper;
+
+    public DepartmentServiceImpl(DepartmentRepository departmentRepository, ModelMapper mapper) {
+        this.departmentRepository = departmentRepository;
+        this.mapper = mapper;
+    }
 
     @Override
     public DepartmentDTO saveDepartment(DepartmentDTO departmentDTO) {
         // convert departmentDTO to department jpa entity
-        Department department = new Department(
-                departmentDTO.getId(),
-                departmentDTO.getDepartmentName(),
-                departmentDTO.getDepartmentDescription(),
-                departmentDTO.getDepartmentCode()
-        );
+        Department department = mapToEntity(departmentDTO);
         Department savedDepartment = departmentRepository.save(department);
-        DepartmentDTO saveDepartmentDTO = new DepartmentDTO(
-                savedDepartment.getId(),
-                savedDepartment.getDepartmentName(),
-                savedDepartment.getDepartmentDescription(),
-                savedDepartment.getDepartmentCode()
-        );
-
-        return saveDepartmentDTO;
+        return mapToDTO(savedDepartment);
     }
 
     @Override
     public DepartmentDTO getDepartmentByCode(String departmentCode) {
         Department department = departmentRepository.findByDepartmentCode(departmentCode);
-        DepartmentDTO departmentDTO = new DepartmentDTO(
-                department.getId(),
-                department.getDepartmentName(),
-                department.getDepartmentDescription(),
-                department.getDepartmentCode()
-        );
+        return mapToDTO(department);
+    }
+
+    private DepartmentDTO mapToDTO(Department department) {
+        DepartmentDTO departmentDTO = mapper.map(department, DepartmentDTO.class);
         return departmentDTO;
     }
-    //private departmentDTO
+
+    private Department mapToEntity(DepartmentDTO departmentDTO) {
+        Department department = mapper.map(departmentDTO, Department.class);
+        return department;
+    }
 }

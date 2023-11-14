@@ -5,10 +5,7 @@ import com.ymh.employeeservice.service.EmployeeService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/employees")
@@ -21,6 +18,12 @@ public class EmployeeController {
     public ResponseEntity<EmployeeDTO> saveEmployee(@RequestBody EmployeeDTO employeeDTO){
         EmployeeDTO savedEmployee = employeeService.saveEmployee(employeeDTO);
         return new ResponseEntity<>(savedEmployee, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{employeeId}")
+    public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable("employeeId") Long id){
+        EmployeeDTO employeeDTO = employeeService.getEmployeeById(id);
+        return new ResponseEntity<>(employeeDTO, HttpStatus.OK);
     }
 
 }
