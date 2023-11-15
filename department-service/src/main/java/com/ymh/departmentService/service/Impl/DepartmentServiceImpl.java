@@ -2,9 +2,9 @@ package com.ymh.departmentService.service.Impl;
 
 import com.ymh.departmentService.DTO.DepartmentDTO;
 import com.ymh.departmentService.entity.Department;
+import com.ymh.departmentService.exception.ResourceNotFoundException;
 import com.ymh.departmentService.repository.DepartmentRepository;
 import com.ymh.departmentService.service.DepartmentService;
-import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -28,8 +28,12 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public DepartmentDTO getDepartmentByCode(String departmentCode) {
-        Department department = departmentRepository.findByDepartmentCode(departmentCode);
-        return mapToDTO(department);
+        try{
+            Department department = departmentRepository.findByDepartmentCode(departmentCode);
+            return mapToDTO(department);
+        }catch (Exception e){
+            throw new ResourceNotFoundException("Department", "departmentCode", departmentCode);
+        }
     }
 
     private DepartmentDTO mapToDTO(Department department) {

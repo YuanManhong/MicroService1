@@ -2,6 +2,7 @@ package com.ymh.employeeservice.service.Impl;
 
 import com.ymh.employeeservice.DTO.EmployeeDTO;
 import com.ymh.employeeservice.entity.Employee;
+import com.ymh.employeeservice.exception.ResourceNotFoundException;
 import com.ymh.employeeservice.repository.EmployeeRepository;
 import com.ymh.employeeservice.service.EmployeeService;
 import lombok.AllArgsConstructor;
@@ -28,8 +29,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDTO getEmployeeById(Long id) {
-        Employee employee = employeeRepository.findById(id).get();
-        return mapToDTO(employee);
+        try{
+            Employee employee = employeeRepository.findById(id).get();
+            return mapToDTO(employee);
+        }catch (Exception e){
+            throw new ResourceNotFoundException("Employee", "employeeId", id);
+        }
     }
 
     private EmployeeDTO mapToDTO(Employee employee){
