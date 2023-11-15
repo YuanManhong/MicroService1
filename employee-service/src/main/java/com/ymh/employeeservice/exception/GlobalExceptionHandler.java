@@ -9,9 +9,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.util.Date;
 
-@ControllerAdvice
+@ControllerAdvice // handle exception globally
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-    @ExceptionHandler(ResourceNotFoundException.class)
+    @ExceptionHandler(ResourceNotFoundException.class) // handle specific exception with custom response
     public ResponseEntity<ErrorDetail> handleResourceNotFoundException(ResourceNotFoundException ex,
                                                                        WebRequest webRequest){
         ErrorDetail errorDetail = new ErrorDetail(new Date(), ex.getMessage(), webRequest.getDescription(false));
